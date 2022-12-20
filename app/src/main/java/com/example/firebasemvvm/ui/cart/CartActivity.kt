@@ -1,5 +1,7 @@
 package com.example.firebasemvvm.ui.cart
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -9,12 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.firebasemvvm.data.model.cart.Cart
 import com.example.firebasemvvm.data.model.total.Total
 import com.example.firebasemvvm.databinding.ActivityCartBinding
-import com.example.firebasemvvm.di.FirebaseModule
-import com.example.firebasemvvm.di.FirebaseModule.toast
+import com.example.firebasemvvm.ui.auth.LoginActivity
+import com.example.firebasemvvm.ui.fragments.MyProductsActivity
+
 import com.example.firebasemvvm.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class CartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCartBinding
@@ -23,8 +27,9 @@ class CartActivity : AppCompatActivity() {
 
 
 
-    var total: Double = 0.0
+
     var subTotal: Double = 0.0
+    var totalPrice = 0.00
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,37 +80,61 @@ class CartActivity : AppCompatActivity() {
         }
 
 
-
-        binding.cartTotal.checkoutBtn.setOnClickListener {
+//
+        binding.tvCheckOut.setOnClickListener {
             val total = Total(
                 userId = "",
                 totalId = "",
-                productId = null,
-                total = total,
+                productId = cartAdapter.getProductIds(),
+                total = totalPrice,
                 subTotal = subTotal
             )
             cartViewModel.addToTotal(total)
 
         }
+//
+//        if(cartAdapter.itemCount == 0){
+//            binding.constraintCart.hide(true)
+//            binding.animationView.show(true)
+//            binding.tvEmptyMsg.show(true)
+//        }else{
+//            binding.btnAction.hide(true)
+//            binding.constraintCart.show(true)
+//            binding.animationView.hide(true)
+//            binding.tvEmptyMsg.hide(true)
+//        }
 
+        cartViewModel.getClickOptions().observe(this) {
+            when (it) {
+                //1 -> finish()
+                1 -> {
+                    openActivity<MyProductsActivity> { }
+                    toast("Clicked")
+                }
 
+            }
+        }
 
     }
+
 
     fun setUpCartDisplay(){
         cartViewModel.cartProducts.observe(this, Observer { response ->
             cartAdapter.setData(response as List<Cart>)
-            for(item in response){
-                val availableQuantity = item.productQty!!.toInt()
-                if (availableQuantity > 0) {
-                    val price = item.productTotalPrice!!.toDouble()
-                    total += price
-                    subTotal =  0.12 * price  + total //Including 12%vGST
-                    binding.cartTotal.tvTotal.text = "TOTAL : " + "$" + total.toString()
-                    binding.cartTotal.tvSubTotal.text = "SUB TOTAL : " + "$" + subTotal
+
+
+
+                for (i in 0 until cartAdapter.itemCount) {
+                    val item = cartAdapter.getItem(i)
+                    if (item.productTotalPrice != null) {
+                        totalPrice += item.productTotalPrice!!
+                        //checkOutProducts = item.productId
+                        subTotal =  (0.12 * totalPrice)  + totalPrice //Including 12%vGST
+                        binding.tvTotal.text = "Price : " + "$" + totalPrice
+                        binding.tvTotalItems.text = cartAdapter.itemCount.toString() + " items "
+                    }
                 }
 
-            }
 
         })
     }
@@ -148,6 +177,7 @@ class CartActivity : AppCompatActivity() {
     }
 
     fun observeMessage(){
+
         cartViewModel.getErrorMsg().observe(this,Observer{response ->
             when(response) {
                 is Network.Success -> {
@@ -159,15 +189,7 @@ class CartActivity : AppCompatActivity() {
                 is Network.Error -> {
                     response.message?.let { message ->
                         //toast(message)
-
-
-
-//                        showCustomSnackbar(
-//                            view = binding.root,
-//                            duration = 1500,
-//                            actionText = message
-//                        )
-
+                        showCustomSnackbar(view = binding.root, duration = 1500, actionText = message)
                     }
                 }
                 is Network.Loading -> {

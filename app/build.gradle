@@ -103,4 +103,5 @@ dependencies {
     //ImagePicker
     implementation 'com.github.dhaval2404:imagepicker:2.1'
 
+    implementation "com.airbnb.android:lottie:5.2.0"
 }

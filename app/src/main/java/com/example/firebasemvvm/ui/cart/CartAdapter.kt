@@ -17,8 +17,18 @@ class CartAdapter (private val clickListener: OnAddClickListener ,
     : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
 
     var cartList = ArrayList<Cart>()
+    private val productIds = ArrayList<String>()
 
+    init {
+        for (product in cartList) {
+            productIds.add(product.productId!!)
+        }
+    }
 
+    @JvmName("getProductIds1")
+    fun getProductIds(): ArrayList<String> {
+        return productIds
+    }
 
     class ViewHolder private constructor(private val binding: CartRowLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -64,7 +74,7 @@ class CartAdapter (private val clickListener: OnAddClickListener ,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position), clickListener,onItemSelectListener,onSubClickListener, position)
     }
-    private fun getItem(position: Int): Cart {
+    fun getItem(position: Int): Cart {
         return cartList[position]
     }
 
@@ -83,9 +93,6 @@ class CartAdapter (private val clickListener: OnAddClickListener ,
 
 
     }
-
-
-
 
 }
 

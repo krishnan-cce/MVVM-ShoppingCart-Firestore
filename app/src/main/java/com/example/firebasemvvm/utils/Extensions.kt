@@ -307,8 +307,8 @@ fun Context.editCart(
         tvOwner.text = user
 
         tvQtyCart.text = product.productQty.toString()
-
         product.stockDiffrence = 0.00
+        tvTotalTxt.text = "Total : $ " + (product.productQty!! * product.productPrice!!.toDouble()).toString()
 
         btnAddQty.setOnClickListener {
             val qty = product.productQty.toString().toDouble()
@@ -316,6 +316,8 @@ fun Context.editCart(
             tvQtyCart.text = finalQty.toString()
             product.productQty = finalQty
             viewModel.addData(product)
+
+            tvTotalTxt.text = "Total : $ " + (finalQty * product.productPrice!!.toDouble()).toString()
         }
         btnSubQty.setOnClickListener {
             val qty = product.productQty.toString().toDouble()
@@ -323,6 +325,13 @@ fun Context.editCart(
             tvQtyCart.text = finalQty.toString()
             product.productQty = finalQty
             viewModel.subData(product)
+            if (finalQty == 0.toDouble()){
+                tvTotalTxt.text = "Quantity Cannot be Zero"
+            }else
+            {
+                tvTotalTxt.text = "Total : $ " +(finalQty * product.productPrice!!.toDouble()).toString()
+            }
+
         }
 
 

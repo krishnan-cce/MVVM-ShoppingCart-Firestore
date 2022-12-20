@@ -57,6 +57,13 @@ class CartViewModel@Inject constructor(application: Application,
     private var onsubClick = MutableLiveData<Int>()
     fun getClickSub(): LiveData<Int> = onsubClick
 
+    /** Click Event for  add to cart */
+    private var clickOption = MutableLiveData<Int>()
+
+
+    fun onClicked(options:Int){
+        clickOption.value = options
+    }
 
 
 
@@ -67,7 +74,7 @@ class CartViewModel@Inject constructor(application: Application,
                 if (!it.isEmpty){
                     cartProducts.postValue(convertData(it,cartProducts))
                 }else{
-                    errorMsg.postValue(Network.Error("Oops ! you dont have any products in your cart"))
+                    errorMsg.postValue(Network.Error("Oops ! your Cart is Empty"))
                 }
             }
             .addOnFailureListener {
@@ -113,7 +120,7 @@ class CartViewModel@Inject constructor(application: Application,
                     val finalStock = currentProductStock -1
 
                     product.productStock = finalStock
-                    val updatedPrice = itemPrice?.times(finalStock)
+                    val updatedPrice = itemPrice?.times(item.productQty.toString().toDouble())
 
                         if (currentProductStock == 0.0){
                             errorMsg.postValue(Network.Error("Oops ! Product Out of Stock"))
@@ -149,8 +156,8 @@ class CartViewModel@Inject constructor(application: Application,
                         val currentProductStock = product.productStock!!.toDouble()
                         val finalStock = currentProductStock + 1
 
-                            val updatedPrice = itemPrice?.times(item.productQty.toString().toDouble())
                             product.productStock = finalStock
+                            val updatedPrice = itemPrice?.times(item.productQty.toString().toDouble())
 
                             productDb.document(item.productId.toString()).update("productStock",finalStock)
                             cartDb.document(item.cartId.toString()).update("productQty",item.productQty
@@ -200,7 +207,7 @@ class CartViewModel@Inject constructor(application: Application,
                     if (!value?.isEmpty!!){
                         cartProducts.postValue(convertData(it,cartProducts))
                     }else{
-                        errorMsg.postValue(Network.Error("Oops ! you dont have any products in your cart"))
+                        errorMsg.postValue(Network.Error("Oops ! your Cart is Empty"))
                     }
                 }
             }
@@ -224,5 +231,5 @@ class CartViewModel@Inject constructor(application: Application,
     }
 
 
-
+    fun getClickOptions(): LiveData<Int> = clickOption
 }

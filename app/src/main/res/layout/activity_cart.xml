@@ -65,6 +65,56 @@
         >
 
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:visibility="gone"
+            android:id="@+id/animationView"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvEmptyMsg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/empty_cart" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tvEmptyMsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="center"
+            android:text="Your cart is empty. Please add items to continue"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:visibility="gone"
+            android:id="@+id/btnAction"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:includeFontPadding="false"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:letterSpacing="0"
+            android:maxLines="1"
+            android:onClick="@{()-> cartVM.onClicked(1)}"
+            android:text="Add Items"
+            android:textSize="14sp"
+            app:cornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvEmptyMsg" />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_cart"
             android:layout_width="match_parent"
@@ -75,21 +125,75 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/constraint_cart"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/cart_row_layout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_cart"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:background="@color/pink"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" >
 
-            <include android:id="@+id/cart_total"
-                layout="@layout/layout_cart_total"/>
 
+<!--            <include android:id="@+id/cart_total"-->
+<!--                layout="@layout/layout_cart_total"/>-->
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_shopping_cart_24" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCheckOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="CheckOut"
+                android:drawableTint="@color/white"
+                android:fontFamily="@font/nunito_semibold"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:background="@drawable/curved_white_12dp"
+                android:id="@+id/tv_total_items"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="10 items"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunito_regular"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:textColor="@color/white"
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Price $120 /-"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_total_items"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
