@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/drawable/curved_white_12dp.xml" value="0.2395" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/drawable/ic_baseline_shopping_cart_24.xml" value="0.2395" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/activity_add_product.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/activity_cart.xml" value="0.264" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/activity_login.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/activity_products.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/add_to_cart_layout.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/cart_row_layout.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/edit_cart_layout.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/layout_alert_dialog_title.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/layout_cart_total.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/krish/FirebaseMVVM/app/src/main/res/layout/snackbar_layout.xml" value="0.24635416666666668" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>
