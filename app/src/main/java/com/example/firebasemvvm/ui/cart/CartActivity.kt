@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.firebasemvvm.data.model.cart.Cart
 import com.example.firebasemvvm.data.model.total.Total
@@ -29,7 +30,7 @@ class CartActivity : AppCompatActivity() {
 
 
     var subTotal: Double = 0.0
-    var totalPrice = 0.00
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,29 +81,18 @@ class CartActivity : AppCompatActivity() {
         }
 
 
-//
+
         binding.tvCheckOut.setOnClickListener {
             val total = Total(
                 userId = "",
                 totalId = "",
                 productId = cartAdapter.getProductIds(),
-                total = totalPrice,
+                total = 0.0,
                 subTotal = subTotal
             )
             cartViewModel.addToTotal(total)
 
         }
-//
-//        if(cartAdapter.itemCount == 0){
-//            binding.constraintCart.hide(true)
-//            binding.animationView.show(true)
-//            binding.tvEmptyMsg.show(true)
-//        }else{
-//            binding.btnAction.hide(true)
-//            binding.constraintCart.show(true)
-//            binding.animationView.hide(true)
-//            binding.tvEmptyMsg.hide(true)
-//        }
 
         cartViewModel.getClickOptions().observe(this) {
             when (it) {
@@ -121,9 +111,17 @@ class CartActivity : AppCompatActivity() {
     fun setUpCartDisplay(){
         cartViewModel.cartProducts.observe(this, Observer { response ->
             cartAdapter.setData(response as List<Cart>)
+            cartAdapter.notifyDataSetChanged()
 
 
+            if(cartAdapter.itemCount > 0){
+                binding.constraintCart.show(true)
+                binding.animationView.hide(true)
+                binding.tvEmptyMsg.hide(true)
+                binding.btnAction.hide(true)
+            }
 
+            var totalPrice = 0.00
                 for (i in 0 until cartAdapter.itemCount) {
                     val item = cartAdapter.getItem(i)
                     if (item.productTotalPrice != null) {
@@ -137,20 +135,20 @@ class CartActivity : AppCompatActivity() {
 
 
         })
+
+        if(cartAdapter.itemCount == 0){
+            binding.constraintCart.hide(true)
+            binding.animationView.show(true)
+            binding.tvEmptyMsg.show(true)
+
+        }
+
     }
 
     fun setupRvCart(){
         cartAdapter = CartAdapter(OnAddClickListener { item: Cart, _: Int ->
-//            val qty = item.productQty.toString().toDouble()
-//            val finalQty = qty +1
-//            item.productQty = finalQty
-//            cartViewModel.addData(item)
         },
             OnSubClickListener{ item:Cart,_:Int ->
-//                val qty = item.productQty.toString().toDouble()
-//                val finalQty = qty -1
-//                item.productQty = finalQty
-//                cartViewModel.subData(item)
             },
             onItemSelectListener { item:Cart,_:Int ->
                 editCart(
@@ -168,6 +166,9 @@ class CartActivity : AppCompatActivity() {
 
         binding.rvCart.apply {
             adapter = cartAdapter
+            layoutManager =  LinearLayoutManager(applicationContext)
+
+
 
         }
 
@@ -188,8 +189,8 @@ class CartActivity : AppCompatActivity() {
                 }
                 is Network.Error -> {
                     response.message?.let { message ->
-                        //toast(message)
-                        showCustomSnackbar(view = binding.root, duration = 1500, actionText = message)
+                        toast(message)
+                        //showCustomSnackbar(view = binding.root, duration = 1500, actionText = message)
                     }
                 }
                 is Network.Loading -> {

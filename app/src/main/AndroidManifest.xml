@@ -19,6 +19,9 @@
         android:theme="@style/Theme.FirebaseMVVM"
         tools:targetApi="31">
         <activity
+            android:name=".ui.orders.OrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.fragments.MyProductsActivity"
             android:exported="false" />
         <activity
@@ -45,7 +48,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
