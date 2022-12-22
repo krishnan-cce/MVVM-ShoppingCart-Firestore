@@ -10,9 +10,9 @@ import android.net.Uri
 import android.util.Patterns
 import android.view.View
 import android.widget.*
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.firebasemvvm.R
 import com.example.firebasemvvm.data.model.cart.Cart
@@ -23,6 +23,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.firestore.FieldValue
 
 
 fun String.isValidEmail() =
@@ -185,7 +186,8 @@ fun Context.addToCart(
                         productQty = finalQuantity,
                         productImg = product.productImageUrl.toString(),
                         productTotalPrice = tvPdtQty.text.toString().toDoubleOrNull()?.times(product.productPrice!!),
-                        productId = product.productId.toString()
+                        productId = product.productId.toString(),
+                       // product = FieldValue.arrayUnion(product)
 
                     )
                     viewModel.saveToCart(cart)
@@ -355,13 +357,26 @@ fun Activity.pickImage(onImagePicked: (Uri) -> Unit) {
         .start()
 }
 
-//fun Activity.openImagePicker() {
-//    val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { result: ActivityResult ->
-//        val selectedImage = result.data?.data
-//        // do something with the selected image
-//    }
-//    ImagePicker.with(this)
-//        .start()
-//}
+fun RecyclerView.swipeToEditOrDelete(
+    swipeDirs: Int = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
+    swipeAction: (viewHolder: RecyclerView.ViewHolder, direction: Int) -> Unit
+) {
+    val itemTouchHelper = ItemTouchHelper(
+        object : ItemTouchHelper.SimpleCallback(0, swipeDirs) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                swipeAction(viewHolder, direction)
+            }
+        }
+    )
+    itemTouchHelper.attachToRecyclerView(this)
+}
 
 

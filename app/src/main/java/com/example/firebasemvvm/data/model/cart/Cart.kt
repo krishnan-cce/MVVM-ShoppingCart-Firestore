@@ -1,5 +1,8 @@
 package com.example.firebasemvvm.data.model.cart
 
+import com.example.firebasemvvm.utils.Products
+import com.google.firebase.firestore.FieldValue
+
 data class Cart(
     var cartId: String? = null,
     var userId: String? = null,
@@ -10,5 +13,5 @@ data class Cart(
     var productStock: Double? = null,
     var productQty: Double? = null,
     var productTotalPrice: Double? = null,
-    var productPrice: Double? = null,
+    var productPrice: Double? = null
 )

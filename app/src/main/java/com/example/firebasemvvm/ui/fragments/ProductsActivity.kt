@@ -18,6 +18,7 @@ import com.example.firebasemvvm.ui.home.HomeViewModel
 import com.example.firebasemvvm.ui.products.*
 import com.example.firebasemvvm.utils.openActivity
 import com.example.firebasemvvm.utils.showAlert
+import com.example.firebasemvvm.utils.swipeToEditOrDelete
 import com.example.firebasemvvm.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,21 +35,15 @@ class ProductsActivity: AppCompatActivity()  {
         setUpRecyclerView()
 
 
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return true
-            }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val myProduct = recAdapter.productList[position]
+
+
+        binding.rvProducts.swipeToEditOrDelete { viewHolder, direction ->
+            val position = viewHolder.adapterPosition
+            val myProduct = recAdapter.productList[position]
+            if (direction == ItemTouchHelper.LEFT) {
+                // Handle left swipe (delete action)
+            } else if (direction == ItemTouchHelper.RIGHT) {
                 showAlert(
                     title = "Are you sure...!",
                     titleDesc = "Delete " + myProduct.productName,
@@ -62,10 +57,6 @@ class ProductsActivity: AppCompatActivity()  {
 
                 )
             }
-        }
-
-        ItemTouchHelper(itemTouchHelperCallback).apply {
-            attachToRecyclerView(binding.rvProducts)
         }
 
 

@@ -45,22 +45,12 @@ class CartActivity : AppCompatActivity() {
         setUpCartDisplay()
 
 
-
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return true
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val cartProduct = cartAdapter.cartList[position]
+        binding.rvCart.swipeToEditOrDelete { viewHolder, direction ->
+            val position = viewHolder.adapterPosition
+            val cartProduct = cartAdapter.cartList[position]
+            if (direction == ItemTouchHelper.LEFT) {
+                // Handle left swipe (delete action)
+            } else if (direction == ItemTouchHelper.RIGHT) {
                 showAlert(
                     title = "Are you sure...!",
                     titleDesc = "Delete " + cartProduct.productName + " From Cart?",
@@ -76,9 +66,6 @@ class CartActivity : AppCompatActivity() {
             }
         }
 
-        ItemTouchHelper(itemTouchHelperCallback).apply {
-            attachToRecyclerView(binding.rvCart)
-        }
 
 
 
