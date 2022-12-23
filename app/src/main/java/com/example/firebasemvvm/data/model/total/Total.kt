@@ -10,3 +10,8 @@ data class Total(
     var total:Double? = null,
     var subTotal:Double? = null
 )
+
+sealed class Item {
+    data class TotalItem(val total: Total) : Item()
+    data class ProductsItem(val products: Products) : Item()
+}

@@ -216,8 +216,9 @@ class CartViewModel@Inject constructor(application: Application,
 
 
     fun addToTotal(total:Total){
-        val db = totalDb.document()
-        val docId = db.id
+        val docId = SessionManager.sessionToken
+        val db = totalDb.document(docId)
+
         total.totalId = docId.toString()
         total.userId = SessionManager.sessionToken
         total.productId = distinct as ArrayList<String>

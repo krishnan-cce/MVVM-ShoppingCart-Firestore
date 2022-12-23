@@ -11,6 +11,9 @@ import android.util.Patterns
 import android.view.View
 import android.widget.*
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -380,3 +383,16 @@ fun RecyclerView.swipeToEditOrDelete(
 }
 
 
+fun <T> LiveData<Network<T>>.observeNetwork(owner: LifecycleOwner, onSuccess: (T) -> Unit, onError: (String) -> Unit
+                                            , onLoading: () -> Unit) {
+    this.observe(owner, Observer {
+        when (it) {
+            is Network.Success -> it.data?.let { it1 -> onSuccess(it1) }
+            is Network.Error -> it.message?.let { it1 -> onError(it1) }
+            is Network.Loading -> onLoading()
+            else -> {
+                // Do nothing for loading state
+            }
+        }
+    })
+}

@@ -19,6 +19,12 @@
     <color name="transparent">#00000000</color>
     <color name="systemBarsColor">#bfbfbf</color>
     <color name="pink">#c2185b</color>
+    <color name="windowBackground">#fafafa</color>
 
+    <color name="textColor1">#808080</color>
+    <color name="textColor2">#E6E6E6</color>
+    <color name="textColor3">#D14444</color>
+    <color name="textColor4">#5279B2</color>
+    <color name="seekbar">#35CC97</color>
 
 </resources>

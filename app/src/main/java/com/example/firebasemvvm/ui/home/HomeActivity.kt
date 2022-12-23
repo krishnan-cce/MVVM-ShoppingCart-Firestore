@@ -12,6 +12,7 @@ import com.example.firebasemvvm.ui.auth.LoginActivity
 import com.example.firebasemvvm.ui.cart.CartActivity
 import com.example.firebasemvvm.ui.fragments.MyProductsActivity
 import com.example.firebasemvvm.ui.fragments.ProductsActivity
+import com.example.firebasemvvm.ui.orders.OrderActivity
 import com.example.firebasemvvm.ui.products.AddProductActivity
 import com.example.firebasemvvm.utils.SessionManager
 import com.example.firebasemvvm.utils.openActivity
@@ -50,7 +51,7 @@ class HomeActivity : AppCompatActivity() {
                 "My Cart" -> openActivity<CartActivity>{}
                 "Profile" -> toast("Coming soon...")
                 "Update Stock" -> toast("Coming soon...")
-                "My Orders" -> toast("Coming soon...")
+                "My Orders" -> openActivity<OrderActivity> {  }
                 "Production Issue" -> toast("Coming soon...")
                 "Production Receipt" -> toast("Coming soon...")
                 "Sales Order" -> toast("Coming soon...")

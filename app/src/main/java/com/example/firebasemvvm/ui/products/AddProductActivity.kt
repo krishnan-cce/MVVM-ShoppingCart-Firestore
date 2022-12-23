@@ -11,7 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.firebasemvvm.R
 import com.example.firebasemvvm.databinding.ActivityAddProductBinding
+import com.example.firebasemvvm.utils.observeNetwork
 import com.example.firebasemvvm.utils.pickImage
+import com.example.firebasemvvm.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,7 +29,7 @@ class AddProductActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupBinding()
         clickEvents()
-
+        observeData()
 
 
     }
@@ -37,6 +39,16 @@ class AddProductActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[ProductViewModel::class.java]
         binding.productsVM = viewModel
         binding.lifecycleOwner = this
+    }
+    private fun observeData(){
+        viewModel.getErrorMsg().observeNetwork(this,
+            onSuccess = { response ->
+
+            }, onError = { response ->
+                toast(response.toString())
+            }, onLoading = {
+                // Show the progress bar
+            })
     }
 
 

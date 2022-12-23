@@ -14,6 +14,7 @@ import com.example.firebasemvvm.data.model.total.Total
 import com.example.firebasemvvm.databinding.ActivityCartBinding
 import com.example.firebasemvvm.ui.auth.LoginActivity
 import com.example.firebasemvvm.ui.fragments.MyProductsActivity
+import com.example.firebasemvvm.ui.orders.OrderActivity
 
 import com.example.firebasemvvm.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,8 +30,8 @@ class CartActivity : AppCompatActivity() {
 
 
 
-    var subTotal: Double = 0.0
-
+    var cartTotal: Double = 0.0
+    var cartSubTotal: Double = 0.0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,15 +71,16 @@ class CartActivity : AppCompatActivity() {
 
 
         binding.tvCheckOut.setOnClickListener {
+
             val total = Total(
                 userId = "",
                 totalId = "",
                 productId = cartAdapter.getProductIds(),
-                total = 0.0,
-                subTotal = subTotal
+                total = cartTotal,
+                subTotal = cartSubTotal
             )
             cartViewModel.addToTotal(total)
-
+            //openActivity<OrderActivity> {  }
         }
 
         cartViewModel.getClickOptions().observe(this) {
@@ -107,7 +109,7 @@ class CartActivity : AppCompatActivity() {
                 binding.tvEmptyMsg.hide(true)
                 binding.btnAction.hide(true)
             }
-
+            var subTotal = 0.0
             var totalPrice = 0.00
                 for (i in 0 until cartAdapter.itemCount) {
                     val item = cartAdapter.getItem(i)
@@ -117,6 +119,8 @@ class CartActivity : AppCompatActivity() {
                         subTotal =  (0.12 * totalPrice)  + totalPrice //Including 12%vGST
                         binding.tvTotal.text = "Price : " + "$" + totalPrice
                         binding.tvTotalItems.text = cartAdapter.itemCount.toString() + " items "
+                        cartSubTotal = subTotal
+                        cartTotal = totalPrice
                     }
                 }
 
@@ -166,26 +170,15 @@ class CartActivity : AppCompatActivity() {
 
     fun observeMessage(){
 
-        cartViewModel.getErrorMsg().observe(this,Observer{response ->
-            when(response) {
-                is Network.Success -> {
-                    response.data?.let { msg ->
-                        toast(msg)
+        cartViewModel.getErrorMsg().observeNetwork(this,
+         onSuccess = { response ->
 
-                    }
-                }
-                is Network.Error -> {
-                    response.message?.let { message ->
-                        toast(message)
-                        //showCustomSnackbar(view = binding.root, duration = 1500, actionText = message)
-                    }
-                }
-                is Network.Loading -> {
-                }
-                else -> {}
-            }
-
+        }, onError = { response ->
+            toast(response.toString())
+        }, onLoading = {
+                // Show the progress bar
         })
+
     }
 
 
